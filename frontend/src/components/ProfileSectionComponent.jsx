@@ -257,49 +257,75 @@ const ProfileSectionComponent = () => {
 
       {
         (popupProfileImageEdit && (
-          <>
-            <div className="w-full h-full absolute top-0 left-0 z-50 flex justify-center items-center backdrop-blur-[2px]">
-              {(uploadingInProgress) ?
-                (
-                  <div className="flex  flex-col gap-3">
-                    <LoaderwaveComponent additionalStyling={"bg-red-600 w-[450px]"} />
-                    <p className='text-center'>Updating...</p>
-                  </div>
-                ) :
-                (
-                  <div className="bg-gray-700 p-10 rounded-2xl">
-                    <div className="relative max-md:w-full mb-6 rounded-xl  p-8 shadow-lg transition-all hover:shadow-xl">
-                      <label className="flex cursor-pointer flex-col items-center justify-center">
-                        <input type="file" className="hidden" accept="image/*" onChange={handleThumbnailChange} />
-                        {thumbnail ? (
-                          <img src={URL.createObjectURL(thumbnail)} alt="Thumbnail" className="h-48 w-full rounded-lg object-cover aspect-square overflow-hidden" />
-                        ) : (
-                          <>
-                            <div className="mb-3 rounded-lg bg-zinc-700/50 p-4 transition-colors hover:bg-zinc-700 aspect-square overflow-hidden">
-                              <BsImage className="h-8 w-8 text-zinc-300" />
-                            </div>
-                            <span className="text-xl font-semibold text-white">Drop your thumbnail here</span>
-                            <p className="mt-2 text-sm text-zinc-400">or click to browse</p>
-                          </>
-                        )}
-                      </label>
-                    </div>
-                    <div className="options-container flex justify-between gap-5">
-                      <button
-                        onClick={UpdateUserProfile}
-                        className="py-2 px-5 w-full text-lg bg-blue-600 cursor-pointer shadow-2xl shadow-black rounded-full">
-                        Update
-                      </button>
-                      <button
-                        onClick={() => setPopupProfileImageEdit(false)}
-                        className="py-2 px-5 w-full text-lg bg-red-600 cursor-pointer shadow-2xl shadow-black rounded-full">
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                )}
-            </div>
-          </>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+            {uploadingInProgress ? (
+              <div className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4">
+                <LoaderwaveComponent additionalStyling="w-full bg-gradient-to-r from-blue-500 to-purple-600" />
+                <p className="mt-4 text-lg font-medium text-gray-200">Updating your profile picture...</p>
+                <p className="text-sm text-gray-400 mt-1">This will just take a moment</p>
+              </div>
+            ) : (
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-xl border border-gray-700 overflow-hidden w-full max-w-md">
+                {/* Header */}
+                <div className="p-6 border-b border-gray-700">
+                  <h3 className="text-xl font-bold text-white">Update Profile Picture</h3>
+                  <p className="text-sm text-gray-400 mt-1">Upload a new image to update your profile</p>
+                </div>
+                
+                {/* Upload Area */}
+                <div className="p-6">
+                  <label className="group flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-600 rounded-xl bg-gray-800/50 hover:border-blue-500 transition-all duration-300 cursor-pointer">
+                    <input 
+                      type="file" 
+                      className="hidden" 
+                      accept="image/*" 
+                      onChange={handleThumbnailChange} 
+                    />
+                    {thumbnail ? (
+                      <div className="relative w-full">
+                        <img 
+                          src={URL.createObjectURL(thumbnail)} 
+                          alt="Profile preview" 
+                          className="w-full h-48 rounded-lg object-cover border border-gray-700"
+                        />
+                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
+                          <BsImage className="h-10 w-10 text-white" />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center">
+                        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gray-700/50 p-4 mb-4 group-hover:bg-blue-500/20 transition-colors">
+                          <BsImage className="h-10 w-10 text-gray-400 group-hover:text-blue-400 transition-colors" />
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-lg font-medium text-white">Drag & drop your image</p>
+                          <p className="text-sm text-gray-400">or click to browse files</p>
+                          <p className="text-xs text-gray-500 mt-2">JPG, PNG (Max 5MB)</p>
+                        </div>
+                      </div>
+                    )}
+                  </label>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex gap-4 p-6 pt-0">
+                  <button
+                    onClick={() => setPopupProfileImageEdit(false)}
+                    className="flex-1 py-3 px-4 rounded-lg bg-gray-700 hover:bg-gray-600 text-white font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={UpdateUserProfile}
+                    disabled={!thumbnail}
+                    className={`flex-1 py-3 px-4 rounded-lg font-medium text-white transition-colors ${thumbnail ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-600/50 cursor-not-allowed'}`}
+                  >
+                    Update Picture
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         ))
       }
 
@@ -453,91 +479,107 @@ const ProfileSectionComponent = () => {
 
         {/* Edit Profile Modal */}
         {isEditModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className={`bg-[#22222C] rounded-xl w-full max-w-md mx-4 p-6 max-h-[90vh] overflow-y-auto ${(isUpdatingProfile) ? "w-fit aspect-square flex items-center justify-center" : ""}`}>
-              {
-                (isUpdatingProfile) ?
-                  (
-                    <div className='flex flex-col gap-3 items-center'>
-                      <Loader />
-                      <p className="animate-pulse text-gray-300">Updating</p>
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
+            <div 
+              className={`bg-gradient-to-br from-[#1E1E2A] to-[#2A2A3A] rounded-2xl w-full max-w-lg mx-auto p-0 overflow-hidden shadow-2xl transform transition-all duration-300 ${
+                isUpdatingProfile 
+                  ? "w-40 h-40 flex items-center justify-center" 
+                  : "max-h-[90vh] overflow-y-auto"
+              }`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {isUpdatingProfile ? (
+                <div className="flex flex-col items-center justify-center p-8">
+                  <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                  <p className="text-gray-300 font-medium">Updating Profile...</p>
+                </div>
+              ) : (
+                <div className="p-6">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                      Edit Profile
+                    </h2>
+                    <p className="text-gray-400 text-sm mt-1">Update your personal information</p>
+                  </div>
+                  
+                  <form onSubmit={handleProfileUpdate} className="space-y-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <div className="space-y-1">
+                        <label className="block text-sm font-medium text-gray-300">First Name</label>
+                        <input
+                          type="text"
+                          name="firstname"
+                          value={editFormData.firstname}
+                          onChange={handleFormChange}
+                          className="w-full bg-[#252533] text-gray-100 border border-gray-700 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-500"
+                          placeholder="John"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <label className="block text-sm font-medium text-gray-300">Last Name</label>
+                        <input
+                          type="text"
+                          name="lastname"
+                          value={editFormData.lastname}
+                          onChange={handleFormChange}
+                          className="w-full bg-[#252533] text-gray-100 border border-gray-700 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-500"
+                          placeholder="Doe"
+                          required
+                        />
+                      </div>
                     </div>
-                  )
-                  :
-                  (
-                    <>
-
-                      <h2 className="text-xl font-semibold text-white mb-6">Edit Profile</h2>
-                      <form onSubmit={handleProfileUpdate} className="space-y-4">
-                        <div>
-                          <label className="block text-gray-300 text-sm mb-2">First Name</label>
-                          <input
-                            type="text"
-                            name="firstname"
-                            value={editFormData.firstname}
-                            onChange={handleFormChange}
-                            className="w-full bg-[#18181E] text-gray-100 border border-gray-700 rounded-md px-3 py-2"
-                            placeholder="Enter first name"
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-gray-300 text-sm mb-2">Last Name</label>
-                          <input
-                            type="text"
-                            name="lastname"
-                            value={editFormData.lastname}
-                            onChange={handleFormChange}
-                            className="w-full bg-[#18181E] text-gray-100 border border-gray-700 rounded-md px-3 py-2"
-                            placeholder="Enter last name"
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-gray-300 text-sm mb-2">Bio</label>
-                          <textarea
-                            name="bio"
-                            value={editFormData.bio}
-                            onChange={handleFormChange}
-                            className="w-full bg-[#18181E] text-gray-100 border border-gray-700 rounded-md px-3 py-2 min-h-[100px]"
-                            placeholder="Tell us about yourself"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-gray-300 text-sm mb-2">Title</label>
-                          <input
-                            type="text"
-                            name="title"
-                            value={editFormData.title}
-                            onChange={handleFormChange}
-                            className="w-full bg-[#18181E] text-gray-100 border border-gray-700 rounded-md px-3 py-2"
-                            placeholder="Your professional title"
-                          />
-                        </div>
-
-                        <div className="flex justify-end space-x-3">
-                          <button
-                            type="button"
-                            onClick={() => setIsEditModalOpen(false)}
-                            className="px-4 py-2 bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600"
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="submit"
-                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                          >
-                            Save Changes
-                          </button>
-                        </div>
-                      </form>
-
-                    </>
-                  )
-              }
+                    
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-300">Title</label>
+                      <input
+                        type="text"
+                        name="title"
+                        value={editFormData.title}
+                        onChange={handleFormChange}
+                        className="w-full bg-[#252533] text-gray-100 border border-gray-700 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-500"
+                        placeholder="e.g. Software Engineer"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-sm font-medium text-gray-300">Bio</label>
+                        <span className="text-xs text-gray-500">{editFormData.bio?.length || 0}/250</span>
+                      </div>
+                      <textarea
+                        name="bio"
+                        value={editFormData.bio}
+                        onChange={handleFormChange}
+                        maxLength={250}
+                        className="w-full bg-[#252533] text-gray-100 border border-gray-700 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-500 min-h-[120px] resize-none"
+                        placeholder="Tell us about yourself..."
+                      />
+                    </div>
+                    
+                    <div className="flex justify-end space-x-3 pt-4 border-t border-gray-800">
+                      <button
+                        type="button"
+                        onClick={() => setIsEditModalOpen(false)}
+                        className="px-5 py-2.5 text-sm font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors duration-200"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        Save Changes
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
             </div>
           </div>
         )}
+        
       </div>
     </div>
   );
