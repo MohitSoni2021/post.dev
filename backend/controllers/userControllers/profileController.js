@@ -2,6 +2,45 @@ import User from "../../models/user.model.js";
 import { updateUserImageInPosts } from "../../utils/ChangePostProfileImge.js";
 
 // Get user profile by ID
+export const getProfileByUsername = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const user = await User.findOne({ username });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        // Return public profile data
+        return res.status(200).json({
+            success: true,
+            data: {
+                _id: user._id,
+                email: user.email,
+                username: user.username,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                title: user.title,
+                bio: user.bio,
+                avatar: user.avatar,
+                accountType: user.accountType,
+                visibility: user.visibility,
+                followers_count: user.followers_count,
+                following_count: user.following_count,
+                createdAt: user.createdAt
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 export const getProfileById = async (req, res) => {
     try {
         const userId = req.params.uid;

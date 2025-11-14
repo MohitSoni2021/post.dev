@@ -4,6 +4,7 @@ import { useState } from "react"
 import { LIKE_A_POST_URL, UNLIKE_A_POST_URL } from "../ApiRoutes";
 import { FetchUserProfile } from "../utils/AuthFunctions";
 import PostCommentPopUp from "./PostCommentPopUp";
+import { Link } from "react-router-dom";
 
 export default function GenericCardComponent({title, desc, image, likes_count, comments_count, postID, user_image, isLiked=false }) {
   const [liked, setLiked] = useState(isLiked);
@@ -59,7 +60,8 @@ export default function GenericCardComponent({title, desc, image, likes_count, c
       )}
 
       {/* Header with User Info */}
-      <div className="p-5 pb-3">
+      <Link to={`/posts/${postID}`}>
+        <div className="p-5 pb-3">
         <div className="flex items-start gap-3">
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-pink-600 rounded-full opacity-75 group-hover:opacity-100 transition-opacity -z-10"></div>
@@ -83,10 +85,11 @@ export default function GenericCardComponent({title, desc, image, likes_count, c
           </div>
         </div>
       </div>
+      </Link>
 
       {/* Post Content */}
       <div className="px-5 pb-4">
-        <p className="text-sm text-zinc-300 mb-4 leading-relaxed line-clamp-3">
+        <p className="text-sm text-zinc-300 mb-4 leading-relaxed line-clamp-1">
           {desc || 'No description available for this post.'}
         </p>
         {image && (

@@ -1,5 +1,6 @@
 import express from "express";
 import { postRouteEntry, createNewPost, getAllPosts, updatePost, deletePost } from "../controllers/postControllers/basicControllers.js";
+import { getPostById } from "../controllers/postControllers/getPostController.js";
 import { incrementPostLike, decrementPostLike } from '../controllers/postControllers/postLikeController.js';
 import { addBookmark, removeBookmark } from '../controllers/postControllers/postBookmarkController.js';
 import { 
@@ -13,6 +14,7 @@ const postRoutes = express.Router();
 
 postRoutes.get("/", postRouteEntry);
 postRoutes.get("/allPosts", getAllPosts);
+postRoutes.get("/:postid", getPostById);
 
 postRoutes.get('/:postId/comments', getComments);
 

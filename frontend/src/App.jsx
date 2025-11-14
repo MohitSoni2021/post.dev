@@ -43,6 +43,7 @@ function App() {
     } catch (error) {
       
     }
+    console.log(Initialdata)
   }, [])
 
   return (
@@ -77,7 +78,7 @@ function App() {
                     <>
                     <GenericCardComponent
                       title={post.title}
-                      desc={post.desc}
+                      desc={post.content}
                       image={post.image}
                       likes_count={post.likes_count}
                       comments_count={post.comments.length}

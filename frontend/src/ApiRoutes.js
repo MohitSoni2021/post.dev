@@ -11,6 +11,8 @@ export const UPDATE_USER_PROFILE_URL = (uid) => {
 
 export const GET_ALL_POST_URL = `${import.meta.env.VITE_API_BASE_URL}api/posts/allPosts`
 
+export const GET_SINGLE_POST_URL = `${import.meta.env.VITE_API_BASE_URL}api/posts`
+
 export const GET_ALL_USER_DETAILS = `${import.meta.env.VITE_API_BASE_URL}api/users/uid/profile/me/`
 
 export const UPLOAD_POST_URL = `${import.meta.env.VITE_API_BASE_URL}api/posts/newPost`
@@ -40,4 +42,8 @@ export const GET_USER_PROFILE_DETAILS = (uid) => {
 
 export const GET_ALL_POST_COMMENTS = (pid) => {
     return `${import.meta.env.VITE_API_BASE_URL}api/posts/${pid}/comments`
+}
+
+export const GET_USER_BY_USERNAME_URL = (username) => {
+    return `${import.meta.env.VITE_API_BASE_URL}api/users/username/${username}/profile`
 }

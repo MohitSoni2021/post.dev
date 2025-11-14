@@ -16,6 +16,9 @@ import PageNotFound from './AdditionalNecessaryElements/PageNotFound.jsx'
 import { useUserStore } from './store/useAuthStore.js'
 import ProfilePage from './pages/ProfilePage.jsx'
 import UserProfileDetails from './pages/UserProfileDetails.jsx'
+import PostDetailsPage from './pages/PostDetailsPage.jsx'
+// import UserProfilePage from './pages/UserDetailsPage.jsx'
+import { UserProfilePage } from './pages/UserDetailsPage.jsx'
 
 
 const DefaulRun = () => {
@@ -63,6 +66,14 @@ const router = createBrowserRouter([
   {
     path : '/profile/:username',
     element : <UserProfileDetails />
+  },
+  {
+    path: '/posts/:postid',
+    element: <PostDetailsPage />
+  },
+  {
+    path : '/user/:username',
+    element : <UserProfilePage />
   },
   {
     path: '/auth',
